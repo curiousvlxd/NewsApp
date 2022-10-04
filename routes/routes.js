@@ -2,8 +2,23 @@
   import path from 'path';
   import news from '../models/news.js';
   import ejs from 'ejs';
+  import methodoverride from 'method-override';
   const router = Router();
   const __dirname = path.resolve();
+  router.use(methodoverride('X-HTTP-Method-Override'));
+  router.use(methodoverride('X-HTTP-Method'));
+  router.use(methodoverride('X-Method-Override'));
+  router.use(
+    methodoverride((req, res) => {
+      if (req.body && typeof req.body === "object" && "_method" in req.body) {
+        // look in urlencoded POST bodies and delete it
+        const method = req.body._method;
+        delete req.body._method;
+        return method;
+      }
+    })
+  );
+  
   router
     .route('/news')
     .get((req, res) => {
@@ -23,19 +38,38 @@
       console.log(newsItem);
       res.send(newsItem);
     })
+    // .delete((req, res) => {
+    //   // news.splice(req.params.id - 1, 1);
+    //   // res.send("ok");
+    //   news.find((item, index) => {
+    //     if (item.id == req.params.id) {
+    //       news.splice(index, 1);
+    //       res.redirect('/');
+    //     }
+    //   });
+    // })
     .delete((req, res) => {
-      // news.splice(req.params.id - 1, 1);
-      // res.send("ok");
-      news.find((item, index) => {
-        if (item.id == req.params.id) {
-          news.splice(index, 1);
-        }
-      res.send('deleted');
-      });
+      const toDelete = news.find((n) => n.id == req.params.id);
+      if (toDelete) {
+        news.splice(news.indexOf(toDelete), 1);
+        res.redirect('/');
+      }
+    })
+    .post ((req, res) => {
+      const toUpdate = news.find((n) => n.id == req.params.id);
+      if (toUpdate) {
+        toUpdate.title = req.body.title;
+        toUpdate.text = req.body.text;
+        res.redirect('/');
+      }
     })
     .put((req, res) => {
-      news[req.params.id - 1] = req.body;
-      res.send("ok");
+      const toUpdate = news.find((n) => n.id == req.params.id);
+      if (toUpdate) {
+        toUpdate.title = req.body.title;
+        toUpdate.text = req.body.text;
+        res.redirect('/');
+      }
     });
   router 
     .route('/')

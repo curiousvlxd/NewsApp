@@ -15,6 +15,9 @@ var credentials = {key: privateKey, cert: certificate};
 
 // app.use(timeFix);
 // app.set('view engine', 'ejs');
+
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.resolve(__dirname, "public", "resources", "images"))); //middleware

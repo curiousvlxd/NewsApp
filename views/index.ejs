@@ -74,13 +74,16 @@
       <input type="text" name="content" />
     </form>
     <ul>
-      <% for (let i = 0; i < news.length; i++) { %>
-        <li>
-          <a href="/news/<%= news[i].id %>">
-            <%= news[i].title %>
-          </a>
-        </li>
-      <% } %>
+      <% news.forEach((n) => { %>
+      <li>
+        <a href="/news/<%= n.id %>"><%= n.title %></a>
+        <form method="POST" action="/news/<%= n.id %>">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit">delete</button>
+        </form>
+      </li>
+      <% })%>
+
     </ul>
     
   </body>
