@@ -24,11 +24,22 @@
     .get((req, res) => {
         res.send(news);
     })
-   .post((req, res) => {
-        console.log(req.body);
-        news.push(req.body);
-        res.redirect('/news');
-   });
+    .post((req, res) => {
+      news.sort((n1, n2) => {
+          if(n1.id < n2.id)
+          return -1;
+          else if(n1.id > n2.id)
+          return 1;
+          else
+          return 0;
+      })
+      let el = req.body;
+      el.id = news[news.length - 1].id + 1;
+      console.log(el);
+      news.push(el);
+      console.log(news);
+      res.redirect("/");
+  })
   router
     .route('/news/:id')
     .get((req, res) => {
