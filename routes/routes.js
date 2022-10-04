@@ -24,8 +24,14 @@
       res.send(newsItem);
     })
     .delete((req, res) => {
-      news.splice(req.params.id - 1, 1);
-      res.send("ok");
+      // news.splice(req.params.id - 1, 1);
+      // res.send("ok");
+      news.find((item, index) => {
+        if (item.id == req.params.id) {
+          news.splice(index, 1);
+        }
+      res.send('deleted');
+      });
     })
     .put((req, res) => {
       news[req.params.id - 1] = req.body;
