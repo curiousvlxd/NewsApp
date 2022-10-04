@@ -9,8 +9,8 @@ import router from './routes/routes.js';
 const app = express();
 const __dirname = path.resolve();
 const PORT = process.env.PORT ?? 3000;
-var privateKey  = fs.readFileSync('/Users/schoolgunslinger/certs/localhost.key', 'utf8');
-var certificate = fs.readFileSync('/Users/schoolgunslinger/certs/localhost.crt', 'utf8');
+var privateKey  = fs.readFileSync('certs/localhost.key', 'utf8');
+var certificate = fs.readFileSync('certs/localhost.crt', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 // app.use(timeFix);

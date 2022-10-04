@@ -17,8 +17,11 @@
   router
     .route('/news/:id')
     .get((req, res) => {
-      console.log(news[req.params.id - 1]);
-      res.send(news[req.params.id - 1]);
+      // console.log(news[req.params.id - 1]);
+      // res.send(news[req.params.id - 1]);
+      const newsItem = news.find((item) => item.id == req.params.id);
+      console.log(newsItem);
+      res.send(newsItem);
     })
     .delete((req, res) => {
       news.splice(req.params.id - 1, 1);
