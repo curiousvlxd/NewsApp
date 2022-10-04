@@ -73,6 +73,15 @@
       <label for="content">Content</label>
       <input type="text" name="content" />
     </form>
+    <ul>
+      <% for (let i = 0; i < news.length; i++) { %>
+        <li>
+          <a href="/news/<%= news[i].id %>">
+            <%= news[i].title %>
+          </a>
+        </li>
+      <% } %>
+    </ul>
     
   </body>
 </html>
