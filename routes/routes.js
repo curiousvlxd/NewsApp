@@ -1,5 +1,6 @@
   import { Router } from 'express';
   import path from 'path';
+  import config from '../config/main.js';
   import news from '../models/news.js';
   import ejs from 'ejs';
   import methodoverride from 'method-override';
@@ -104,10 +105,10 @@
         res.send("<h1>Hello, I am express server (PUT REQUEST)</h1>");
     });
   router.get("/about", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "views", "about.html"));
+    res.sendFile(path.resolve(__dirname, config.views, "about.html"));
   });
   router.get("/posts", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "views", "posts.html"));
+    res.sendFile(path.resolve(__dirname, config.views, "posts.html"));
   });
 
 

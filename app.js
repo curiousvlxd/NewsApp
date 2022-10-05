@@ -7,16 +7,16 @@ import ejs from 'ejs';
 import timeFix from './middleware.js';
 import router from './routes/routes.js';
 const app = express();
+
 const __dirname = path.resolve();
-const PORT = process.env.PORT ?? 3000;
+app.set('port', 3000);
+const PORT = process.env.PORT || app.get('port');
 var privateKey  = fs.readFileSync('certs/localhost.key', 'utf8');
 var certificate = fs.readFileSync('certs/localhost.crt', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 // app.use(timeFix);
 // app.set('view engine', 'ejs');
-
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
