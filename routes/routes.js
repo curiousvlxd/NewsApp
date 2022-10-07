@@ -1,8 +1,9 @@
   import { Router } from 'express';
+  import counters from '../app.js';
   import path from 'path';
   import config from '../config/main.js';
   import news from '../models/news.js';
-  import ejs from 'ejs';
+  import dateFormat from 'dateformat';
   import methodoverride from 'method-override';
   const router = Router();
   const __dirname = path.resolve();
@@ -19,7 +20,6 @@
       }
     })
   );
-  
   router
     .route('/news')
     .get((req, res) => {
@@ -50,16 +50,6 @@
       console.log(newsItem);
       res.send(newsItem);
     })
-    // .delete((req, res) => {
-    //   // news.splice(req.params.id - 1, 1);
-    //   // res.send("ok");
-    //   news.find((item, index) => {
-    //     if (item.id == req.params.id) {
-    //       news.splice(index, 1);
-    //       res.redirect('/');
-    //     }
-    //   });
-    // })
     .delete((req, res) => {
       const toDelete = news.find((n) => n.id == req.params.id);
       if (toDelete) {
@@ -94,7 +84,6 @@
     //   res.sendFile(path.resolve(__dirname, "views", "index.ejs"));
     // })
     })
-   
     .post((req, res) => {
         res.send("<h1>Hello, I am express server (POST REQUEST)</h1>");
     })
@@ -108,8 +97,12 @@
     res.sendFile(path.resolve(__dirname, config.views, "about.html"));
   });
   router.get("/posts", (req, res) => {
-    res.sendFile(path.resolve(__dirname, config.views, "posts.html"));
+    // res.sendFile(path.resolve(__dirname, config.views, "posts.html"));
+    JSON.parse(JSON.stringify(counters), (key, value) => { 
+    if (key == `localhost-visitors-${dateFormat(new Date(), 'dd-mm-yyyy')}`) { 
+      console.log(value, key);
+      res.render("posts.handlebars", {counters: value});
+    };
   });
-
-
+});
   export default router;
