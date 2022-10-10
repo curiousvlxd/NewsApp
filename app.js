@@ -3,10 +3,10 @@ import bodyParser from 'body-parser';
 import https from 'https';
 import fs from 'fs';
 import path from 'path';
+import ejsMate from 'ejs-mate';
 import ejs from 'ejs';
 import timeFix from './middleware.js';
 import router from './routes/routes.js';
-import { engine } from 'express-handlebars';
 import expressSession from 'express-session';
 import expressVisitorCounter from 'express-visitor-counter';
 
@@ -20,17 +20,17 @@ var certificate = fs.readFileSync('certs/localhost.crt', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 // app.use(timeFix);
+app.use(expressSession({ secret: 'secret', resave: false, saveUninitialized: true }));
+app.use(expressVisitorCounter({ hook: counterId => counters[counterId] = (counters[counterId] || 0) + 1 }));
 app.enable('trust proxy');
 app.set('view engine', 'ejs');
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
+app.engine('ejs', ejsMate);
 app.use(expressSession({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(expressVisitorCounter({ hook: counterId => counters[counterId] = (counters[counterId] || 0) + 1 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.resolve(__dirname, "public", "resources", "images"))); //middleware
 app.use(router);
-app.render("posts.handlebars", {counters: counters});
 
 
 var httpsServer = https.createServer(credentials, app);

@@ -76,7 +76,11 @@
   router 
     .route('/')
     .get((req, res) => {
-      res.render("index.ejs", {title: "NewsApp", news: news})
+      JSON.parse(JSON.stringify(counters), (key, value) => { 
+        if (key == `localhost-visitors-${dateFormat(new Date(), 'dd-mm-yyyy')}`) { 
+      res.render("index.ejs", {title: "NewsApp", news: news, visitors: value});
+        };
+      });
       // html = ejs.renderFile(path.resolve(__dirname, "views", "index.ejs"), {title: "NewsApp"}, (err, html) => {
       //   if (err) { throw new Error(err); }
       //   res.send(html);
@@ -94,14 +98,17 @@
         res.send("<h1>Hello, I am express server (PUT REQUEST)</h1>");
     });
   router.get("/about", (req, res) => {
-    res.sendFile(path.resolve(__dirname, config.views, "about.html"));
+    JSON.parse(JSON.stringify(counters), (key, value) => { 
+      if (key == `localhost-visitors-${dateFormat(new Date(), 'dd-mm-yyyy')}`) { 
+   res.render("about.ejs", {title: "About", news: news, visitors: value});
+  };
+});
   });
   router.get("/posts", (req, res) => {
     // res.sendFile(path.resolve(__dirname, config.views, "posts.html"));
     JSON.parse(JSON.stringify(counters), (key, value) => { 
     if (key == `localhost-visitors-${dateFormat(new Date(), 'dd-mm-yyyy')}`) { 
-      console.log(value, key);
-      res.render("posts.handlebars", {counters: value});
+      res.render("posts.ejs", {title: "Posts", visitors: value});
     };
   });
 });
