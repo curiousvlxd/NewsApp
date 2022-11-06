@@ -29,9 +29,8 @@ app.use(expressSession({ secret: 'secret', resave: false, saveUninitialized: tru
 app.use(expressVisitorCounter({ hook: counterId => counters[counterId] = (counters[counterId] || 0) + 1 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(path.resolve(__dirname, "public", "resources", "images"))); //middleware
+app.use(express.static(path.resolve(__dirname, "public"))); //middleware
 app.use(router);
-
 
 var httpsServer = https.createServer(credentials, app);
 httpsServer.listen(PORT, () => {
